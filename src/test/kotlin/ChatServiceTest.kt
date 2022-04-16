@@ -4,11 +4,6 @@ import org.junit.Test
 
 class ChatServiceTest {
 
-    @org.junit.Before
-    fun setUp() {
-
-    }
-
     @org.junit.After
     fun tearDown() {
         ChatService.clear()
@@ -59,8 +54,8 @@ class ChatServiceTest {
         val ids3 = ChatService.user(1).messageTo(2, message3)
 
         assertEquals(
-            ChatService.getMessages(ids1.first, ids1.second, 3).map { it.id to it.text to it.read},
-            listOf(ids1.second to message1 to true, ids2.second to message2 to true, ids3.second to message3 to true)
+            listOf(ids1.second to message1 to true, ids2.second to message2 to true, ids3.second to message3 to true),
+            ChatService.getMessages(ids1.first, ids1.second, 3).map { it.id to it.text to it.isRead}
         )
     }
 
@@ -89,9 +84,9 @@ class ChatServiceTest {
 
     @Test
     fun deleteMessage() {
-        val ids = ChatService.user(1).messageTo(2, "message1")
+        val (chatId,messageId) = ChatService.user(1).messageTo(2, "message1")
         ChatService.user(2).messageTo(1, "message2")
-        assertTrue(ChatService.deleteMessage(ids.first, ids.second))
+        assertTrue(ChatService.deleteMessage(chatId, messageId))
     }
 
     @Test
